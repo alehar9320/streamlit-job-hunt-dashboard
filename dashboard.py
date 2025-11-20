@@ -2,12 +2,22 @@ import streamlit as st
 import requests
 import json
 
-url = 'https://jobsearch.api.jobtechdev.se'
-url_for_search = f"{url}/search"
+# Configuration
+API_BASE_URL = 'https://jobsearch.api.jobtechdev.se'
+SEARCH_ENDPOINT = f"{API_BASE_URL}/search"
 
 def _get_ads(params):
+    """
+    Fetches job ads from the JobTech Dev JobSearch API.
+    
+    Args:
+        params (dict): Query parameters for the API search.
+        
+    Returns:
+        dict: JSON response from the API.
+    """
     headers = {'accept': 'application/json'}
-    response = requests.get(url_for_search, headers=headers, params=params)
+    response = requests.get(SEARCH_ENDPOINT, headers=headers, params=params)
     response.raise_for_status()  # check for http errors
     return json.loads(response.content.decode('utf8'))
 
