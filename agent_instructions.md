@@ -8,6 +8,7 @@ These instructions are designed to guide Antigravity in maintaining high accurac
 -   **State Management**: Use `st.session_state` for managing state across reruns, especially for interactive elements like buttons and inputs.
 -   **Performance**: Use `st.cache_data` or `st.cache_resource` (or `st.experimental_memo`/`st.experimental_singleton` for older versions) to optimize expensive computations or data fetching.
 -   **Layout**: Utilize `st.columns`, `st.sidebar`, and `st.expander` effectively to create clean and organized layouts.
+-   **Native First**: Prioritize native Streamlit components (e.g., `st.container(border=True)`, `st.metric`) over custom CSS or JS hacks. Only use custom CSS when absolutely necessary and native alternatives are insufficient.
 
 ## 2. Code Quality & Style
 -   **Clarity**: Write clear, readable code with meaningful variable names.

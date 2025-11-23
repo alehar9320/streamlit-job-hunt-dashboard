@@ -44,52 +44,7 @@ def get_base64_of_bin_file(bin_file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-def set_custom_css():
-    st.markdown("""
-        <style>
-        /* General Card Styling for Columns */
-        [data-testid="stColumn"] {
-            background-color: #f8f9fa;
-            border-radius: 15px;
-            padding: 15px;
-            transition: all 0.3s ease;
-            border: 1px solid #e0e0e0;
-        }
-        
-        [data-testid="stColumn"]:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-color: #0D8ABC;
-        }
 
-        /* Image Styling */
-        [data-testid="stImage"] img {
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-        
-        /* Button Styling */
-        .stButton button {
-            width: 100%;
-            border-radius: 8px;
-            font-weight: 600;
-            border: none;
-            background-color: #0D8ABC;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .stButton button:hover {
-            background-color: #0b76a0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        /* Remove default padding from top of columns to make cards look tighter */
-        .block-container {
-            padding-top: 2rem;
-        }
-        </style>
-    """, unsafe_allow_html=True)
 
 def render_dashboard():
     st.title("🚀 Job Hunt Dashboard")
@@ -101,33 +56,31 @@ def render_dashboard():
     for i, (role, image_path) in enumerate(ROLES.items()):
         col = cols[i % 3]
         with col:
-            # Fetch hit count
-            count = 0
-            try:
-                params = {'q': role, 'limit': 0}
-                response = _get_ads(params)
-                count = response['total']['value']
-            except Exception:
-                count = "N/A"
+            with st.container():
+                # Image
+                if os.path.exists(image_path):
+                    st.image(image_path, use_column_width=True) 
+                else:
+                    st.warning(f"Image not found: {image_path}")
 
-            # Display Card
-            # Image
-            if os.path.exists(image_path):
-                # FIX: use_container_width -> use_column_width for older Streamlit
-                st.image(image_path, use_column_width=True) 
-            else:
-                st.warning(f"Image not found: {image_path}")
+                # Fetch hit count
+                count = 0
+                try:
+                    params = {'q': role, 'limit': 0}
+                    response = _get_ads(params)
+                    count = response['total']['value']
+                except Exception:
+                    count = "N/A"
 
-            # Metric
-            st.metric(label="Open Positions", value=count)
+                # Role Title & Count
+                st.subheader(role)
+                st.markdown(f"**{count}** positions found")
 
-            # Button
-            if st.button(f"Explore {role}", key=f"btn_{role}"):
-                st.session_state.selected_role = role
-                st.session_state.page = 'listings'
-                safe_rerun()
-            
-            st.markdown("---") # Spacer
+                # Button
+                if st.button(f"Explore", key=f"btn_{role}"):
+                    st.session_state.selected_role = role
+                    st.session_state.page = 'listings'
+                    safe_rerun()
 
 def render_listings():
     role = st.session_state.selected_role
@@ -171,7 +124,7 @@ def render_listings():
 
 def main():
     st.set_page_config(page_title="Alexander's Job Hunt", page_icon="💼", layout="wide")
-    set_custom_css()
+    # set_custom_css() # Removed in favor of native components
 
     # Sidebar Profile
     with st.sidebar:
@@ -179,6 +132,11 @@ def main():
         st.title("Alexander Härenstam")
         st.markdown("**Product Manager**")
         st.markdown("[LinkedIn Profile](https://www.linkedin.com/in/alehar/)")
+        
+        # About / Info
+        with st.expander("About this App"):
+            st.info("This dashboard aggregates job listings from the JobTech Dev API to help streamline the job hunt process.")
+            
         st.markdown("---")
         if st.button("Reset Dashboard"):
             st.session_state.page = 'home'
