@@ -44,6 +44,12 @@ def get_base64_of_bin_file(bin_file):
         data = f.read()
     return base64.b64encode(data).decode()
 
+def truncate_text(text, max_length=20):
+    """Truncates text to a maximum length, adding ellipsis if needed."""
+    if len(text) <= max_length:
+        return text
+    return text[:max_length-3] + "..."
+
 
 
 def render_dashboard():
@@ -57,12 +63,6 @@ def render_dashboard():
         col = cols[i % 3]
         with col:
             with st.container():
-                # Image
-                if os.path.exists(image_path):
-                    st.image(image_path, use_column_width=True) 
-                else:
-                    st.warning(f"Image not found: {image_path}")
-
                 # Fetch hit count
                 count = 0
                 try:
@@ -72,12 +72,19 @@ def render_dashboard():
                 except Exception:
                     count = "N/A"
 
-                # Role Title & Count
-                st.subheader(role)
-                st.markdown(f"**{count}** positions found")
+                # Card Layout: Stacked (No nested columns allowed)
+                # Image (Icon size)
+                if os.path.exists(image_path):
+                    st.image(image_path, width=50) 
+                else:
+                    st.warning("No Img")
+
+                # Role Title & Count (Metric)
+                display_role = truncate_text(role, max_length=20)
+                st.metric(label=display_role, value=count)
 
                 # Button
-                if st.button(f"Explore", key=f"btn_{role}"):
+                if st.button(f"Explore", key=f"btn_{role}", help=f"Explore {role} positions"):
                     st.session_state.selected_role = role
                     st.session_state.page = 'listings'
                     safe_rerun()
