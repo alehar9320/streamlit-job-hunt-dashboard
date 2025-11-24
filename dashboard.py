@@ -3,6 +3,7 @@ import requests
 import json
 import base64
 import os
+import groq_service
 
 # Configuration
 API_BASE_URL = 'https://jobsearch.api.jobtechdev.se'
@@ -124,6 +125,15 @@ def render_listings():
                                 st.write(hit['description']['text'][:300] + "...")
                             if 'webpage_url' in hit:
                                 st.markdown(f"[Read Full Ad]({hit['webpage_url']})")
+                            
+                            # Scoring Integration
+                            if st.button("✨ Score Job", key=f"score_{hit['id']}"):
+                                with st.spinner("Analyzing with Groq..."):
+                                    description = hit.get('description', {}).get('text', '')
+                                    profile = st.session_state.get('profile_content', "Product Manager")
+                                    score_analysis = groq_service.score_job(description, profile)
+                                    st.markdown("### 🤖 AI Analysis")
+                                    st.markdown(score_analysis)
                 else:
                     st.info("No ads found.")
             except Exception as e:
@@ -139,6 +149,14 @@ def main():
         st.title("Alexander Härenstam")
         st.markdown("**Product Manager**")
         st.markdown("[LinkedIn Profile](https://www.linkedin.com/in/alehar/)")
+        
+        # Profile Context for AI
+        with st.expander("👤 AI Profile Context"):
+            st.session_state.profile_content = st.text_area(
+                "Paste your Resume/LinkedIn Summary here:",
+                value=st.session_state.get('profile_content', "Experienced Product Manager with a background in tech..."),
+                height=150
+            )
         
         # About / Info
         with st.expander("About this App"):
