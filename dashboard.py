@@ -28,7 +28,7 @@ def safe_rerun():
         st.warning("Please manually refresh the page.")
 
 # --- API Functions ---
-@st.experimental_memo(ttl=3600) # Cache for 1 hour
+@st.cache_data(ttl=3600) # Cache for 1 hour
 def _get_ads(params):
     """
     Fetches job ads from the JobTech Dev JobSearch API.
