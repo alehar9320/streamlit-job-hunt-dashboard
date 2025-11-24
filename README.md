@@ -1,48 +1,77 @@
-# JobTech Dev Job Search Dashboard
+# 🚀 Job Hunt Dashboard
 
-This project is a simple Streamlit dashboard that interfaces with the [JobTech Dev JobSearch API](https://jobsearch.api.jobtechdev.se/) to search for job advertisements.
+A personalized, interactive dashboard to streamline the job search process. This application interfaces with the [JobTech Dev JobSearch API](https://jobsearch.api.jobtechdev.se/) to aggregate, filter, and display job advertisements for specific roles.
 
-## Architecture
+**Live Demo:** [https://swe-job-hunt-dash.streamlit.app/](https://swe-job-hunt-dash.streamlit.app/)
 
-The application follows a simple client-server architecture where:
+## ✨ Features
 
--   **Frontend**: [Streamlit](https://streamlit.io/) provides the web interface (UI). It handles user input (search queries) and renders the results.
--   **Backend Logic**: Python is used to handle the business logic. It makes HTTP requests to the external API.
--   **External API**: The [JobSearch API](https://jobsearch.api.jobtechdev.se/) is the source of truth for job data.
+-   **Role-Based Filtering**: Quickly view opportunities for pre-defined roles (e.g., Product Manager, Frontend Developer).
+-   **Real-Time Data**: Fetches live job listings directly from the JobTech Dev API.
+-   **Interactive UI**: Clean, responsive interface built with Streamlit.
+-   **Job Details**: View key details including employer, description preview, and direct links to full ads.
+-   **Smart Caching**: Implements caching to reduce API calls and improve performance.
 
-### Data Flow
-1.  User enters a query in the Streamlit UI.
-2.  Python script sends a GET request to `https://jobsearch.api.jobtechdev.se/search`.
-3.  API responds with JSON data containing job hits.
-4.  Python script parses the JSON.
-5.  Streamlit updates the UI to display the results.
+## 🛠️ Architecture
 
-## Configuration
+The application follows a simple client-server architecture:
 
-The project is configured to use the JobSearch API.
+-   **Frontend**: [Streamlit](https://streamlit.io/) handles the UI, user input, and rendering.
+-   **Backend**: Python logic manages API requests, data parsing, and state management.
+-   **Data Source**: [JobTech Dev JobSearch API](https://jobsearch.api.jobtechdev.se/) serves as the source of truth for job data.
 
--   **API Endpoint**: `https://jobsearch.api.jobtechdev.se`
--   **Search Endpoint**: `/search`
+## 📂 Project Structure
 
-## Prerequisites
+```text
+streamlit-dash-pm-example/
+├── assets/                 # Static assets (images, icons)
+├── dashboard.py            # Main application logic
+├── requirements.txt        # Python dependencies
+├── README.md               # Project documentation
+└── agent_instructions.md   # Guidelines for AI assistance
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
 
 -   Python 3.9+
--   `pip`
+-   pip
 
-## Installation
+### Installation
 
-1.  Install the required packages:
+1.  Clone the repository:
     ```bash
-    pip install streamlit requests
+    git clone https://github.com/alehar9320/streamlit-job-hunt-dashboard.git
+    cd streamlit-job-hunt-dashboard
     ```
-    *(Note: `altair<5` might be required if you encounter version compatibility issues with Streamlit)*
 
-## Usage
+2.  Install the required packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Run the dashboard using Streamlit:
+### Usage
+
+Run the dashboard locally:
 
 ```bash
 streamlit run dashboard.py
 ```
 
-The dashboard will open in your default web browser at `http://localhost:8501`.
+The app will open in your default browser at `http://localhost:8501`.
+
+## ⚙️ Configuration
+
+The application is configured to use the JobSearch API:
+
+-   **API Endpoint**: `https://jobsearch.api.jobtechdev.se`
+-   **Search Endpoint**: `/search`
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
